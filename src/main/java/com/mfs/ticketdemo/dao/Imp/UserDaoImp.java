@@ -40,6 +40,8 @@ public class UserDaoImp implements UserDao {
             UserEntity user = new UserEntity();
             user.setEmail(authReqModel.getEmail());
             user.setPassword(bCryptPasswordEncoder.encode(authReqModel.getPassword()));
+            user.setUsername(authReqModel.getUsername());
+            user.setPhone(authReqModel.getPhone());
 
             Set<String> strRoles = authReqModel.getRoles();
             Set<RoleEntity> roles = new HashSet<>();

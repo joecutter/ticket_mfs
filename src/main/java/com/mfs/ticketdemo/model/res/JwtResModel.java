@@ -4,22 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
-public class JwtResModel {
-	private String token;
-	private String type = "Bearer";
-	private String id;
+@NoArgsConstructor
+public class JwtResModel implements Serializable {
+	private static final long serialVersionUID = -8091879091924046844L;
+
 	private String username;
-	private String email;
+	private String phone;
+	private String accessToken;
+	private String type = "Bearer";
 	private List<String> roles;
 
-	public JwtResModel(String accessToken, String id, String username, String email, List<String> roles) {
-		this.token = accessToken;
-		this.id = id;
+	public JwtResModel(String accessToken, List<String> roles, String username, String phone) {
 		this.username = username;
-		this.email = email;
+		this.phone = phone;
+		this.accessToken = accessToken;
 		this.roles = roles;
 	}
 }

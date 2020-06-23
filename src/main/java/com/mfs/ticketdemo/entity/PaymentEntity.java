@@ -6,22 +6,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
-@Document( collection = "events")
+@Document( collection = "payments")
 @JsonIgnoreProperties
-public class EventsEntity implements Serializable {
+public class PaymentEntity implements Serializable {
     @Id
     String eventId;
+    String amount;
     String title;
-    String category;
-    String description;
-    String prize;
-    String image;
-    String venue;
-    String email;
-    Date createdAt;
-    Date updatedAt;
-
+    String phone;
 }

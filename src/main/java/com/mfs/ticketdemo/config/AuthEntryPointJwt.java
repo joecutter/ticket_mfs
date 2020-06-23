@@ -1,6 +1,7 @@
 package com.mfs.ticketdemo.config;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-
+public class AuthEntryPointJwt implements AuthenticationEntryPoint, Serializable {
+    private static final long serialVersionUID = -7858869558953243875L;
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
     @Override

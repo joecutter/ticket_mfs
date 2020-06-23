@@ -8,26 +8,35 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 @Service
 public class EventsDaoImp implements EventsDao {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${mfs.public.path}")
+    private String path;
+
     @Autowired
     EventsRepo eventsRepo;
 
-
-
     @Override
-    public ApiResModel createEvent(EventsEntity eventsEntity) {
+    public ApiResModel createEvent(EventsEntity eventsEntity, MultipartFile file) throws IOException {
         String msg = "Event Created";
+        String fileLocation = "http://localhost:8900/public" + uploadFile(file);
         try{
             eventsEntity.setEventId(getRandomString());
+            eventsEntity.setImage(fileLocation);
             eventsRepo.save(eventsEntity);
             return new ApiResModel(200, true, msg);
         }catch (Exception ex){
@@ -44,7 +53,7 @@ public class EventsDaoImp implements EventsDao {
             EventsEntity eventsEntity = eventsRepo.findByEventId(eventId).isPresent()? eventsRepo.findByEventId(eventId).get() : null;
             eventsEntity.setTitle(event.getTitle());
             eventsEntity.setDescription(event.getDescription());
-            eventsEntity.setFee(event.getFee());
+            eventsEntity.setPrize(event.getPrize());
             eventsEntity.setImage(event.getImage());
             eventsRepo.save(eventsEntity);
             return new ApiResModel(200, true, msg);
@@ -76,6 +85,12 @@ public class EventsDaoImp implements EventsDao {
             logger.error(ex.getMessage(), ex);
         }
         return new ApiResModel(400,false, eventId+" Fail to Delete");
+    }
+
+    public String uploadFile(MultipartFile file) throws IOException {
+        String filename = file.getOriginalFilename();
+        file.transferTo(new File(path + filename));
+        return filename;
     }
 
     public String getRandomString() {
